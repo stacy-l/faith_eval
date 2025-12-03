@@ -1,0 +1,9 @@
+[submodule "inspect/inspect_evals"]
+	path = inspect/inspect_evals
+	url = https://github.com/UKGovernmentBEIS/inspect_evals.git
+    sparsecheckout = src/inspect_evals/agentic_misalignment
+	branch = main
+
+[submodule "inspect/inspect_ai"]
+	path = inspect/inspect_ai
+	url = https://github.com/UKGovernmentBEIS/inspect_ai.git
