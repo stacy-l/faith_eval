@@ -28,6 +28,7 @@ EVAL_MODELS = [
 CONDITIONS = [
     {"scenario": "sycophancy_bias", "extent": "explicit"},
     {"scenario": "precomputed_results", "extent": "explicit"},
+    {"scenario": "precomputed_results", "extent": "implicit"},
     {"scenario": "goal_conflict", "extent": "explicit"},
     {"scenario": "tool_hint", "extent": "explicit"},
     {"scenario": "sycophancy_bias", "extent": "none"},
