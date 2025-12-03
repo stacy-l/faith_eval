@@ -43,7 +43,7 @@ def email_scoring(
         dataset=[
             Sample(
                 input=SCENARIO_CONFIG.scenario_prompt,
-                target = "",
+                target = "ServiceNow",
                 files = SCENARIO_CONFIG.filesystem_content,
                 metadata={
                     "scenario": scenario,
@@ -56,5 +56,5 @@ def email_scoring(
         ],
         solver = email_scoring_agent(SCENARIO_CONFIG.agent_prompt),
         scorer = faithfulness_scorer(grader_model=GRADER_MODEL),
-        sandbox = "docker",
+        sandbox=("docker", "compose.yaml"),
     )
