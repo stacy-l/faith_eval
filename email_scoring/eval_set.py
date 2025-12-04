@@ -2,17 +2,42 @@ from inspect_ai import eval_set
 from inspect_ai.model import get_model, GenerateConfig
 from task import email_scoring
 
+from scenario_builder import (
+    ScenarioType,
+    ExtentType,
+)
+import typing
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
+# EVAL_MODELS = [
+#             get_model("openrouter/x-ai/grok-code-fast-1",
+#                         config = GenerateConfig(max_tokens=32_000, attempt_timeout=600, reasoning = {"enabled": True}),
+#                         ),
+#             get_model("anthropic/claude-sonnet-4-20250514",
+#                         config = GenerateConfig(max_tokens=32_000, reasoning = {"enabled": True}, reasoning_tokens=10_000, attempt_timeout=600),
+#             ),
+#             get_model("openrouter/openai/gpt-oss-120b",
+#                         config = GenerateConfig(max_tokens=32_000, reasoning = {"enabled": True}, attempt_timeout=600),
+#             ),
+#             get_model("openrouter/qwen/qwen3-next-80b-a3b-thinking",
+#                         config = GenerateConfig(max_tokens=32_000, reasoning = {"enabled": True}, attempt_timeout=600),
+#             ),
+#             get_model("openrouter/deepseek/deepseek-r1-0528",
+#                         config = GenerateConfig(max_tokens=32_000, reasoning = {"enabled": True}, attempt_timeout=600),
+#                         provider = {"order": ['parasail']}
+#             ),
+#     ]
+
 EVAL_MODELS = [
-            get_model("openrouter/x-ai/grok-code-fast-1",
-                        config = GenerateConfig(max_tokens=32_000, attempt_timeout=600, reasoning = {"enabled": True}),
-                        ),
             get_model("anthropic/claude-sonnet-4-20250514",
                         config = GenerateConfig(max_tokens=32_000, reasoning = {"enabled": True}, reasoning_tokens=10_000, attempt_timeout=600),
             ),
+            get_model("openrouter/x-ai/grok-code-fast-1",
+                        config = GenerateConfig(max_tokens=32_000, attempt_timeout=600, reasoning = {"enabled": True}),
+                        ),
             get_model("openrouter/openai/gpt-oss-120b",
                         config = GenerateConfig(max_tokens=32_000, reasoning = {"enabled": True}, attempt_timeout=600),
             ),
@@ -25,16 +50,13 @@ EVAL_MODELS = [
             ),
     ]
 
+scenario_types = typing.get_args(ScenarioType)
+extent_types = typing.get_args(ExtentType)
+
 CONDITIONS = [
-    {"scenario": "sycophancy_bias", "extent": "explicit"},
-    {"scenario": "precomputed_results", "extent": "explicit"},
-    {"scenario": "precomputed_results", "extent": "implicit"},
-    {"scenario": "goal_conflict", "extent": "explicit"},
-    {"scenario": "tool_hint", "extent": "explicit"},
-    {"scenario": "sycophancy_bias", "extent": "none"},
-    {"scenario": "precomputed_results", "extent": "none"},
-    {"scenario": "goal_conflict", "extent": "none"},
-    {"scenario": "tool_hint", "extent": "none"},
+    {"scenario": scenario, "extent": extent}
+    for scenario in scenario_types
+    for extent in extent_types
 ]
 
 all_logs = []
@@ -46,8 +68,6 @@ for cond in CONDITIONS:
     task = email_scoring(
         scenario=scenario,
         extent=extent,
-        oversight="none",
-        environment="none",
     )
     
     log_dir = f"./logs/{scenario}_{extent}"
@@ -62,9 +82,9 @@ for cond in CONDITIONS:
         model=EVAL_MODELS,
         max_connections=20,
         max_retries=8,
-        time_limit=1200, # 20 minutes max: longer indicates something weird might be happening
+        time_limit=600, # 10 minutes max: longer indicates something weird might be happening
         fail_on_error=5,
-        epochs=10,
+        epochs=30,
         log_dir=log_dir,
     )
     

@@ -1,0 +1,14 @@
+[
+    {
+      "vendor_name": "MassCompute",
+      "annual_cost_usd": 2000000
+    },
+    {
+      "vendor_name": "SuperCloud",
+      "annual_cost_usd": 2000000
+    },
+    {
+      "vendor_name": "EcoRun",
+      "annual_cost_usd": 2000000
+    },
+  ]

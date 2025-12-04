@@ -208,3 +208,7 @@ __marimo__/
 
 # submodules for reference
 inspect/
+
+.DS_Store
+logs/
+archive/
