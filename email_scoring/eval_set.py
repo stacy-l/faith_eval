@@ -12,25 +12,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# EVAL_MODELS = [
-#             get_model("openrouter/x-ai/grok-code-fast-1",
-#                         config = GenerateConfig(max_tokens=32_000, attempt_timeout=600, reasoning = {"enabled": True}),
-#                         ),
-#             get_model("anthropic/claude-sonnet-4-20250514",
-#                         config = GenerateConfig(max_tokens=32_000, reasoning = {"enabled": True}, reasoning_tokens=10_000, attempt_timeout=600),
-#             ),
-#             get_model("openrouter/openai/gpt-oss-120b",
-#                         config = GenerateConfig(max_tokens=32_000, reasoning = {"enabled": True}, attempt_timeout=600),
-#             ),
-#             get_model("openrouter/qwen/qwen3-next-80b-a3b-thinking",
-#                         config = GenerateConfig(max_tokens=32_000, reasoning = {"enabled": True}, attempt_timeout=600),
-#             ),
-#             get_model("openrouter/deepseek/deepseek-r1-0528",
-#                         config = GenerateConfig(max_tokens=32_000, reasoning = {"enabled": True}, attempt_timeout=600),
-#                         provider = {"order": ['parasail']}
-#             ),
-#     ]
-
 EVAL_MODELS = [
             get_model("anthropic/claude-sonnet-4-20250514",
                         config = GenerateConfig(max_tokens=32_000, reasoning = {"enabled": True}, reasoning_tokens=10_000, attempt_timeout=600),

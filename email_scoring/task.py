@@ -29,6 +29,7 @@ def email_scoring(
         dataset=[
             Sample(
                 input=SCENARIO_CONFIG.scenario_prompt,
+                instructions=SCENARIO_CONFIG.agent_prompt,
                 files = SCENARIO_CONFIG.filesystem_content,
                 metadata={
                     "scenario": scenario,
