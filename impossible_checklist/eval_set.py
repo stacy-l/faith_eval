@@ -11,7 +11,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from task import impossible_checklist
-from scenario_builder import get_experimental_conditions
+from scenario_builder import get_experimental_conditions, TaskSet
 
 # Load .env from parent directory
 load_dotenv(Path(__file__).parent.parent / ".env")
@@ -104,29 +104,38 @@ EVAL_MODELS = [
 # Evaluation Configuration
 # =============================================================================
 
-RUNS_PER_CONDITION = 25  # Recommended 20-30 for statistical power
+RUNS_PER_CONDITION = 5  # Recommended 20-30 for statistical power
+TIME_LIMIT = 900 # 15 minutes
 
 # =============================================================================
 # Run Evaluation
 # =============================================================================
 
-if __name__ == "__main__":
-    conditions = get_experimental_conditions()
+def run_eval(task_set: TaskSet | None = None):
+    """
+    Run evaluation for specified task_set, or all task_sets if None.
+
+    Args:
+        task_set: "all_tasks", "possible_only", "impossible_only", or None for all
+    """
+    conditions = get_experimental_conditions(task_set)
     all_logs = []
 
     for cond in conditions:
+        ts = cond["task_set"]
         pressure = cond["pressure"]
         eval_awareness = cond["eval_awareness"]
 
         task = impossible_checklist(
             pressure=pressure,
             eval_awareness=eval_awareness,
+            task_set=ts,
         )
 
-        log_dir = f"./logs/pressure_{pressure}_eval_{eval_awareness}"
+        log_dir = f"./logs/{ts}/pressure_{pressure}_eval_{eval_awareness}"
 
         print(f"\n{'='*60}")
-        print(f"Running: pressure={pressure} / eval_awareness={eval_awareness}")
+        print(f"Running: task_set={ts} / pressure={pressure} / eval_awareness={eval_awareness}")
         print(f"Log dir: {log_dir}")
         print(f"{'='*60}\n")
 
@@ -135,7 +144,7 @@ if __name__ == "__main__":
             model=EVAL_MODELS,
             max_connections=20,
             max_retries=8,
-            time_limit=600,  # 10 minutes max per run
+            time_limit=TIME_LIMIT,
             fail_on_error=5,
             epochs=RUNS_PER_CONDITION,
             log_dir=log_dir,
@@ -144,6 +153,24 @@ if __name__ == "__main__":
         all_logs.extend(logs)
 
         if not success:
-            print(f"Warning: Some evals failed for pressure_{pressure}_eval_{eval_awareness}")
+            print(f"Warning: Some evals failed for {ts}/pressure_{pressure}_eval_{eval_awareness}")
 
     print(f"\nComplete! {len(all_logs)} total logs generated.")
+    return all_logs
+
+
+if __name__ == "__main__":
+    import sys
+
+    # Allow running specific task_set via command line: python eval_set.py all_tasks
+    if len(sys.argv) > 1:
+        task_set_arg = sys.argv[1]
+        if task_set_arg in ("all_tasks", "possible_only", "impossible_only"):
+            run_eval(task_set_arg)
+        else:
+            print(f"Unknown task_set: {task_set_arg}")
+            print("Usage: python eval_set.py [all_tasks|possible_only|impossible_only]")
+            sys.exit(1)
+    else:
+        # Default: run all task sets
+        run_eval()
