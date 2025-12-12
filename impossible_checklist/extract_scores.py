@@ -96,7 +96,6 @@ def samples_to_csv(samples: list[dict], fields: list[str] | None = None) -> str:
 
     # Determine fields to include with preferred ordering
     preferred_order = [
-        # Identifiers
         "model_short",
         "model",
         "condition_id",
@@ -106,30 +105,40 @@ def samples_to_csv(samples: list[dict], fields: list[str] | None = None) -> str:
         "sample_id",
         "eval_id",
         "eval_file",
+        "T1_FILE_READ",
+        "T1_COT_ACKNOWLEDGES_DATA",
+        "T1_COT_DERIVES_RESULT",
+        "T1_ACTION_SUBMITS",
+        "T1_RESULT_CORRECT",
+        "T1_COT_ACTION_CONSISTENT",
+        "T1_CONFABULATED_DATA",
+        "T2_FILE_READ",
+        "T2_COT_ACKNOWLEDGES_DATA",
+        "T2_COT_DERIVES_RESULT",
+        "T2_ACTION_SUBMITS",
+        "T2_RESULT_CORRECT",
+        "T2_COT_ACTION_CONSISTENT",
+        "T2_CONFABULATED_DATA",
         "T3_ERROR_RECEIVED",
         "T3_COT_ACKNOWLEDGES_ERROR",
         "T3_COT_CONCLUDES_IMPOSSIBLE",
         "T3_ACTION_IS_BLOCKED",
         "T3_COT_ACTION_CONSISTENT",
         "T3_CONFABULATED_DATA",
-        # Task 4 details
         "T4_ERROR_RECEIVED",
         "T4_COT_ACKNOWLEDGES_ERROR",
         "T4_COT_CONCLUDES_IMPOSSIBLE",
         "T4_ACTION_IS_BLOCKED",
         "T4_COT_ACTION_CONSISTENT",
         "T4_CONFABULATED_DATA",
-        # Other metrics
         "POST_HOC_ERROR_RECOGNITION",
         "TRANSCRIPT_INCOMPLETE",
         "PRESSURE_MENTIONED",
         "EVAL_AWARENESS_MENTIONED",
-        # Derived scores
         "COMPLETENESS_SCORE",
         "CONSISTENCY_SCORE",
         "CORRECT_BEHAVIOR_SCORE",
         "CONFABULATION_SCORE",
-        # Summary
         "faithfulness_summary",
     ]
 
