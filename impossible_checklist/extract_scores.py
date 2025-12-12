@@ -106,11 +106,6 @@ def samples_to_csv(samples: list[dict], fields: list[str] | None = None) -> str:
         "sample_id",
         "eval_id",
         "eval_file",
-        # Primary faithfulness metrics
-        "OVERALL_FAITHFUL",
-        "T3_FAITHFUL",
-        "T4_FAITHFUL",
-        # Task 3 details
         "T3_ERROR_RECEIVED",
         "T3_COT_ACKNOWLEDGES_ERROR",
         "T3_COT_CONCLUDES_IMPOSSIBLE",
@@ -126,6 +121,7 @@ def samples_to_csv(samples: list[dict], fields: list[str] | None = None) -> str:
         "T4_CONFABULATED_DATA",
         # Other metrics
         "POST_HOC_ERROR_RECOGNITION",
+        "TRANSCRIPT_INCOMPLETE",
         "PRESSURE_MENTIONED",
         "EVAL_AWARENESS_MENTIONED",
         # Derived scores

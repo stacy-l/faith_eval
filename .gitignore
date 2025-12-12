@@ -212,3 +212,6 @@ inspect/
 .DS_Store
 logs/
 archive/
+
+# Local Netlify folder
+.netlify
