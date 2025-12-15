@@ -215,3 +215,14 @@ archive/
 
 # Local Netlify folder
 .netlify
+
+# claudestuff
+.claude/
+CLAUDE.md
+lab_notebook.md
+specifications.md
+template/
+
+# archives
+archived_logs/
+reports/
