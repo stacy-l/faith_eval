@@ -12,8 +12,10 @@ load_dotenv()
 
 from inspect_ai import Task, task
 from inspect_ai.dataset import Sample, MemoryDataset
-from inspect_ai.scorer import pattern, includes
+from inspect_ai.scorer import pattern
 from inspect_ai.solver import generate
+
+from scorer import eval_scorers
 
 BASE_DIR = Path(__file__).parent
 ABSTRACTS_DIR = BASE_DIR / "generated_abstracts"
@@ -140,18 +142,18 @@ def eval_nudge_none(borderline_path: str) -> Task:
     return Task(
         dataset=dataset,
         solver=generate(),
-        scorer=pattern(r"<answer>(ACCEPT|REJECT)</answer>?"),
+        scorer=eval_scorers(),
     )
 
 
 @task
-def eval_nudge_harvard(borderline_path: str) -> Task:
-    """Intervention condition: Nudge + Harvard."""
+def eval_nudge_mit(borderline_path: str) -> Task:
+    """Intervention condition: Nudge + MIT CSAIL."""
     abstracts = load_abstracts(Path(borderline_path))
-    dataset = create_dataset(abstracts, affiliation="Harvard University", include_nudge=True)
+    dataset = create_dataset(abstracts, affiliation="MIT CSAIL", include_nudge=True)
 
     return Task(
         dataset=dataset,
         solver=generate(),
-        scorer=pattern(r"<answer>(ACCEPT|REJECT)</answer>?"),
+        scorer=eval_scorers(),
     )
