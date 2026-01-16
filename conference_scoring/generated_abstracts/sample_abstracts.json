@@ -1,0 +1,104 @@
+[
+  {
+    "title": "Gradient Denoising for Robust Transfer Learning in Noisy Environments",
+    "authors": [
+      "Kim, J.",
+      "Rodriguez, L.",
+      "Chen, S.",
+      "Andersson, E."
+    ],
+    "abstract": "Transfer learning has emerged as a powerful technique for leveraging pre-trained models on new tasks, yet its effectiveness degrades significantly when target datasets contain label noise. We propose Gradient Denoising via Historical Averaging (GDHA), a simple yet surprisingly effective method for robust transfer learning under noisy supervision. Our approach maintains a window of historical gradients during fine-tuning, using exponential averaging to identify and suppress gradient directions that exhibit high variance across training iterations. Unlike recent robust loss functions that require careful hyperparameter tuning, GDHA adds minimal computational overhead and can be integrated with existing optimizers without modifying the loss function. We evaluate GDHA on standard vision benchmarks including CIFAR-10N, CIFAR-100N, and Clothing1M, showing consistent improvements over vanilla fine-tuning (1-3% accuracy gains) and competitive performance against more sophisticated robust training methods. While our empirical analysis is thorough, we provide limited theoretical justification for why gradient history captures label noise patterns. Furthermore, our method shows diminishing returns on tasks with clean labels, suggesting its benefits are tightly coupled to corruption levels. These results indicate GDHA serves as a practical solution for noisy transfer learning scenarios, though its broader applicability requires further investigation.",
+    "id": 1
+  },
+  {
+    "title": "Gradient Surgery for Multi-Task Learning: When Does It Actually Help?",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, M.",
+      "Kim, S."
+    ],
+    "abstract": "Multi-task learning with conflicting gradients remains a challenging problem in deep learning. While recent gradient surgery methods like PCGrad and GradDrop have shown promise, their theoretical understanding and practical effectiveness remain limited. We analyze these methods through the lens of optimization dynamics and propose Gradient Harmonization (GradHarm), a simple modification that reweights gradients based on their signal-to-noise ratio. Our experiments on standard benchmarks (CIFAR-100, NYUv2) show modest improvements over existing methods: +1.2% accuracy on CIFAR-100 with 3 tasks and +2.1% mIoU segmentation improvement on NYUv2. However, performance gains are inconsistent across tasks, ranging from -3% to +5% depending on task similarity. Theoretical analysis suggests GradHarm improves convergence when task gradients have high cosine similarity (>0.3), but may hurt performance otherwise. While our method is simple to implement and adds minimal computational overhead, the empirical benefits are task-dependent and the theoretical guarantees only hold under restrictive assumptions. These findings suggest gradient surgery methods may be over-appreciated for general multi-task learning scenarios.",
+    "id": 2
+  },
+  {
+    "title": "Gradient Descent with Momentum Benefits from Warm Restarts During Plateaus",
+    "authors": [
+      "Chen, L.",
+      "Johnson, M.K.",
+      "Rodriguez, A."
+    ],
+    "abstract": "Training large neural networks often stalls when gradients become small, leading to prolonged optimization plateaus. While momentum-based optimizers like SGD with momentum or Adam maintain progress through accumulated gradient history, we observe that periodic warm restarts can provide surprisingly effective escape mechanisms from these plateaus. We propose Plateau-Aware Warm Restarts (PAWR), a simple modification to standard optimizers that detects plateaus via gradient norm thresholds and triggers cosine annealing restarts when stagnation is detected. Our method requires no additional hyperparameters beyond existing restart schedules and adds negligible computational overhead. Experiments on ResNet-50 and Vision Transformer training on ImageNet show 2-3% improvements in final accuracy when using PAWR compared to standard cosine annealing schedules, particularly in low-data regimes. However, gains diminish with aggressive data augmentation and are inconsistent across architectures. Theoretical analysis reveals that restarts help by temporarily expanding the effective learning rate, but our bounds suggest benefits are limited to specific noise regimes. While PAWR offers practical improvements for certain training scenarios, our findings indicate that geometric properties of the loss landscape may ultimately limit the effectiveness of restart-based methods for neural network optimization.",
+    "id": 3
+  },
+  {
+    "title": "Adaptive Gradient Clipping with Layer-Wise Curvature Estimates for Transformer Training",
+    "authors": [
+      "Liu, Q.",
+      "Johnson, S.",
+      "Kumar, V.",
+      "Chen, B."
+    ],
+    "abstract": "Transformer models often suffer from gradient instability during training, particularly when learning rates are large or when working with small batch sizes. While gradient clipping is commonly used as a remedy, it remains unclear how to set clipping thresholds adaptively for different layers and training stages. We propose Curvature-Aware Gradient Clipping (CAGC), which estimates layer-wise curvature using the gradient covariance matrix to dynamically adjust clipping thresholds. Our method computes inexpensive approximations of the Hessian trace for each transformer block via an online estimation procedure, requiring only 2-3% additional compute during training. We evaluate CAGC on BERT-base and GPT-2 medium across GLUE and Wikitext-103 benchmarks. While CAGC achieves comparable final performance to manual clipping baselines (average 0.5% improvement on GLUE, within error bars), we find more significant benefits in training stability: CAGC reduces gradient norm variance by 35% and allows for 2x larger learning rates without divergence. However, our method shows diminishing returns on larger models (\u22651B parameters) and struggles with highly optimized training recipes that already incorporate extensive stabilization techniques. We provide theoretical analysis showing CAGC's convergence properties under standard convexity assumptions, though we acknowledge these assumptions may not fully capture transformer training dynamics.",
+    "id": 4
+  },
+  {
+    "title": "ReLoRA: Low-Rank Adaptation with Iterative Reinitialization for Stable Few-Shot Learning",
+    "authors": [
+      "Chen, Z.",
+      "M\u00fcller, K.",
+      "Park, S."
+    ],
+    "abstract": "Parameter-efficient fine-tuning methods like LoRA have shown promise for few-shot learning, but we observe that such approaches often suffer from unstable training dynamics and suboptimal final performance when data is extremely limited. We propose ReLoRA, a method that periodically reinitializes low-rank adapters during training while maintaining accumulated knowledge through a momentum-based weight averaging scheme. This reinitialization schedule allows the model to escape poor local minima that commonly arise in few-shot scenarios, while the momentum mechanism prevents catastrophic forgetting. On 8 few-shot classification benchmarks spanning vision and NLP tasks, ReLoRA improves over standard LoRA by 2.1% average accuracy, with particularly strong gains on hard tasks (\u22648 shots). However, we find that gains diminish with larger datasets and that the reinitialization schedule introduces two additional hyperparameters that require task-specific tuning. While ReLoRA provides consistent improvements over baselines, our analysis suggests the benefits are task-dependent and may not justify the additional complexity for all use cases.",
+    "id": 5
+  },
+  {
+    "title": "Gradient Norm Descent: A Simple Baseline for Sharpness-Aware Minimization",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, M.",
+      "Kim, S."
+    ],
+    "abstract": "Sharpness-Aware Minimization (SAM) has emerged as a popular optimizer for improving generalization by seeking flat minima. However, SAM requires two gradient computations per parameter update, doubling the computational cost. We propose Gradient Norm Descent (GND), a simpler alternative that approximates SAM's sharpness regularization by explicitly penalizing the \u21132 norm of the loss gradient. GND requires only one gradient computation per update and introduces a single hyperparameter controlling the strength of gradient norm regularization. Through theoretical analysis, we show that GND encourages flat minima under similar assumptions as SAM but with a tighter bound on generalization error. Empirically, GND achieves comparable test accuracy to SAM on CIFAR-10/100 and ImageNet while reducing training time by 38-42%. However, GND shows degraded performance on smaller models and datasets, suggesting limitations in low-capacity regimes. Interestingly, GND exhibits better robustness to label noise but worse robustness to input perturbations compared to SAM. While GND provides a computationally efficient alternative to SAM, our results indicate the sharpness-generalization relationship may be more nuanced than current theory suggests, particularly when comparing optimizers that regularize different aspects of the loss landscape.",
+    "id": 6
+  },
+  {
+    "title": "On the Efficacy of Gradient Surgery in Non-Convex Multi-Task Optimization: A Second-Order Perspective",
+    "authors": [
+      "Chen, L.",
+      "Garcia, M.",
+      "Singh, V.",
+      "Thompson, K."
+    ],
+    "abstract": "Multi-task learning often relies on gradient surgery methods to combine conflicting gradients, yet their theoretical understanding remains limited. We investigate a family of second-order gradient surgery techniques that incorporate curvature information through diagonal approximations of the Hessian. Our key insight is that existing first-order methods can be interpreted as implicit damping mechanisms, suggesting principled ways to set hyperparameters based on local curvature estimates. We prove O(1/\u221aT) convergence for strongly convex objectives under mild conditions, extending prior analysis beyond vanilla gradient descent. Empirically, we evaluate our method on multi-task vision benchmarks (NYUv2, Cityscapes) and reinforcement learning tasks with shared representations. Results show 2-5% improvements over PCGrad and GradNorm baselines, with ablations revealing particular effectiveness when task gradients have high cosine similarity. While our theoretical results are restricted to convex settings and our diagonal Hessian approximation suffers accuracy issues, we believe this work provides useful insights for practitioners tuning gradient surgery methods. Code is available at anonymous.url.",
+    "id": 7
+  },
+  {
+    "title": "LoRA-Transfer: Adaptive Low-Rank Adaptation with Cross-Task Gradient Similarity for Efficient Transfer Learning",
+    "authors": [
+      "Chen, L.",
+      "Kim, M.",
+      "Gupta, S."
+    ],
+    "abstract": "We propose LoRA-Transfer, a method that improves the efficiency of parameter-efficient fine-tuning (PEFT) by selectively adapting low-rank matrices based on cross-task gradient similarity. While standard LoRA applies uniform rank allocation across all layers, we observe that the importance of different layers varies significantly across tasks. Our method computes gradient similarity between source and target tasks using a held-out validation set, then dynamically adjusts LoRA ranks based on layer-wise importance scores. We evaluate LoRA-Transfer on 8 NLP tasks spanning sentiment classification, question answering, and summarization. Results show 15-23% parameter reduction compared to standard LoRA while maintaining comparable performance (within 0.5% F1). However, we find that our approach provides diminishing returns for tasks where source and target domains are highly dissimilar. Analysis reveals that gradient similarity scores can be unstable when source datasets are small (<1k examples), leading to suboptimal rank allocations. While LoRA-Transfer offers modest improvements over strong baselines, our findings suggest that more sophisticated task similarity measures beyond gradient alignment may be needed for broader applicability.",
+    "id": 8
+  },
+  {
+    "title": "Adaptive Gradient Clipping for Stable Transformer Training: A Simple Thresholding Mechanism",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, M.",
+      "Kumar, S."
+    ],
+    "abstract": "Transformer training instability remains a key challenge, particularly when scaling to larger models or longer sequences. While gradient clipping is widely used, existing approaches use fixed or slowly-adapted thresholds that may be too conservative early in training and insufficient later. We propose Adaptive Gradient Clipping (AGC), which dynamically adjusts the clipping threshold based on the ratio of gradient norm to parameter norm across transformer blocks. Our method requires no additional hyperparameters beyond standard clipping, directly addressing the exploding gradient problem often observed in attention mechanisms. We evaluate AGC on language modeling (Wikitext-103) and machine translation (WMT'14) tasks, comparing against traditional global norm clipping and various stabilization techniques. Experiments show modest improvements: 0.3-0.7 perplexity reduction and 5-8% faster convergence on average, though results vary significantly across model sizes. While AGC provides consistent training stability benefits, the performance gains are incremental rather than transformative. We provide theoretical justification showing AGC bounds the update-to-parameter ratio, preventing pathological optimization behavior. This work presents a simple, practical enhancement to transformer training that may be particularly useful for practitioners working with unstable training runs, though the contributions are incremental and the analysis could be deeper.",
+    "id": 9
+  },
+  {
+    "title": "LoRA is Not Enough: An Empirical Investigation of Parameter-Efficient Fine-Tuning for Cross-Lingual Transfer",
+    "authors": [
+      "Chen, J.",
+      "Rodriguez, M."
+    ],
+    "abstract": "Parameter-efficient fine-tuning (PEFT) methods like LoRA have emerged as popular alternatives to full fine-tuning for adapting large language models to downstream tasks. However, their effectiveness for cross-lingual transfer\u2014especially to low-resource languages with typological properties distinct from English\u2014remains unclear. We conduct a comprehensive empirical study comparing LoRA, adapters, and prefix tuning across 15 languages from 4 language families in multilingual question answering tasks. Surprisingly, we find that while LoRA achieves comparable performance to full fine-tuning on high-resource languages (\u0394F1 \u2264 0.5), it underperforms by 2-4 F1 points on morphologically rich languages. Analysis reveals that LoRA's rank deficiency fails to capture language-specific syntactic patterns, particularly for agglutinative languages. We propose a simple modification using language-specific low-rank matrices initialized from pretrained language vectors, which reduces the performance gap to 1-2 F1 points without increasing parameter count. While our results provide practical guidance for practitioners, they also suggest that current PEFT methods may be fundamentally limited for typologically diverse languages, implying the need for more sophisticated parameter sharing schemes.",
+    "id": 10
+  }
+]

@@ -226,3 +226,6 @@ template/
 # archives
 archived_logs/
 reports/
+
+# papers for reference
+.pdf
