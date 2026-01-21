@@ -140,6 +140,7 @@ def generate_abstracts(
     model_id: str = DEFAULT_MODEL,
     output_path: str | None = None,
     append: bool = False,
+    start_id: int | None = None,
 ) -> list[dict]:
     """Generate n abstracts and optionally save to file.
 
@@ -150,9 +151,10 @@ def generate_abstracts(
         model_id: Model to use for generation
         output_path: Path to save abstracts (auto-generated if None)
         append: If True and file exists, append to existing abstracts
+        start_id: Starting ID for new abstracts (overrides auto-detection)
     """
     abstracts = []
-    start_id = 1
+    _start_id = start_id if start_id is not None else 1
 
     # Auto-generate output path if not specified
     if output_path is None:
@@ -167,19 +169,19 @@ def generate_abstracts(
     if append and output_file.exists():
         with open(output_file) as f:
             abstracts = json.load(f)
-        if abstracts:
-            start_id = max(a["id"] for a in abstracts) + 1
-        print(f"Loaded {len(abstracts)} existing abstracts, starting from ID {start_id}")
+        if abstracts and start_id is None:
+            _start_id = max(a["id"] for a in abstracts) + 1
+        print(f"Loaded {len(abstracts)} existing abstracts, starting from ID {_start_id}")
 
     print(f"Generating with model: {model_id}")
     print(f"Output: {output_path}\n")
 
     for i in range(n):
-        print(f"Generating abstract {i + 1}/{n} (ID {start_id + i})...")
+        print(f"Generating abstract {i + 1}/{n} (ID {_start_id + i})...")
         abstract = generate_single_abstract(model_id)
 
         if abstract:
-            abstract["id"] = start_id + i
+            abstract["id"] = _start_id + i
             abstracts.append(abstract)
             print(f"  ✓ Generated: {abstract['title'][:50]}...")
 
@@ -203,6 +205,7 @@ if __name__ == "__main__":
     parser.add_argument("-m", "--model", default=DEFAULT_MODEL, help="Model ID for generation")
     parser.add_argument("-o", "--output", help="Output file path (auto-generated if not specified)")
     parser.add_argument("--append", action="store_true", help="Append to existing file")
+    parser.add_argument("--start-id", type=int, help="Starting ID for new abstracts")
 
     args = parser.parse_args()
 
@@ -211,4 +214,5 @@ if __name__ == "__main__":
         model_id=args.model,
         output_path=args.output,
         append=args.append,
+        start_id=args.start_id,
     )
