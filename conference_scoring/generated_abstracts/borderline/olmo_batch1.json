@@ -1,0 +1,478 @@
+[
+  {
+    "title": "Revisiting Empirical Fisher Diagonal Approximations for Modern Neural Networks",
+    "authors": [
+      "Kumar, V.",
+      "Chen, S.",
+      "Rodriguez, M."
+    ],
+    "abstract": "The Fisher Information Matrix (FIM) underlies many second-order optimization and uncertainty quantification schemes, yet its exact form remains computationally prohibitive for large-scale models. We re-examine the classical diagonal Fisher approximation\u2014long considered too crude for deep networks\u2014by combining it with layer-wise gradient normalization and an online exponential moving average of squared gradients. On CIFAR-10/100 and ImageNet subsets, the resulting optimizer matches or marginally improves upon Adam in final accuracy (+0.3%) while reducing wall-clock time 12%. A Bayesian logistic regression experiment calibrated with our\u8fd1\u4f3cFIM exhibits better sparsity\u2013accuracy trade-offs than recent Kronecker-factored alternatives. However, ablations reveal that most gains stem from the normalization scheme rather than the diagonal structure itself, and performance degrades on transformer architectures. Theoretically, we bound the approximation error under ReLU activations, showing it grows with depth but remains controlled when weight initialization variance is below 1/L. Code and pretrained weights are provided to reproduce all experiments. While the diagonal Fisher is unlikely to supplant structured approximations, our results suggest it warrants renewed consideration for convolutional pipelines when compute budgets are tight.",
+    "id": 1,
+    "original_id": 17
+  },
+  {
+    "title": "Adaptive Gradient Rescaling: A Simple but Modest Improvement for Deep Network Optimization",
+    "authors": [
+      "Chen, L.",
+      "Kumar, S.",
+      "Nguyen, T."
+    ],
+    "abstract": "We propose Adaptive Gradient Re-scaling (AGR), a lightweight modification to standard optimizers that re-weights parameter updates based on an exponentially smoothed estimate of gradient curvature. While methods like Adam and RMSProp adapt learning-rates coordinate-wise, AGR re-calibrates the global step magnitude by tracking ratio of change in loss to average gradient norm over a sliding window. On CIFAR-10/100 and ImageNet, AGR+SGD yields 0.9\u20131.2% top-1 accuracy gains over tuned SGD+momentum and 0.4% over AdamW at equal wall-clock time, with 5% reduction in validation loss fluctuations. The method adds three lines of code, one extra hyper-parameter (window size w), and negligible memory cost. Ablation shows benefits vanish when curvature signals are noisy. We provide convergence analysis for quadratic objectives, but general theory is limited. Code is included, yet extensive evaluation on larger tasks and downstream transfer is deferred to future work. AGR offers consistent but incremental improvements, making it attractive for practitioners willing to tune an additional hyper-parameter, but its simplicity limits novelty.",
+    "id": 2,
+    "original_id": 25
+  },
+  {
+    "title": "Revisiting Entropy Regularization in Policy Gradient Methods with Adaptive Temperature Schedules",
+    "authors": [
+      "Chen, L.",
+      "Kumar, S.",
+      "Rodriguez, M."
+    ],
+    "abstract": "Entropy regularization is widely used in reinforcement learning to encourage exploration and prevent premature convergence. While fixed temperature parameters are common, we propose an adaptive entropy schedule that dynamically adjusts the regularization strength based on policy performance. Our method tracks the entropy of the policy distribution and modulates the temperature parameter using a simple proportional controller. We evaluate our approach on continuous control tasks from the MuJoCo suite and find modest improvements in sample efficiency, achieving 8-12% faster convergence on half of the environments tested. Theoretical analysis shows that our adaptive schedule preserves the original convergence guarantees under standard assumptions, though we note that the practical benefits appear limited to environments where exploration is particularly challenging. While our contributions are primarily incremental, we believe this work provides a useful ablation study on the role of entropy scheduling in modern policy optimization. Code is available online, though we acknowledge that hyperparameter sensitivity remains a significant limitation that may hinder broader adoption.",
+    "id": 3,
+    "original_id": 47
+  },
+  {
+    "title": "Revisiting Momentum with Look-ahead Model Predictions",
+    "authors": [
+      "Kumar, V.",
+      "Chen, S.",
+      "Nguyen, T."
+    ],
+    "abstract": "Momentum-based optimizers remain the de-facto standard for training deep networks, yet their theoretical benefits often vanish under practical hyper-parameter choices. We propose Look-ahead Momentum (LaM), a simple modification that computes the momentum update using a one-step model prediction rather than the current gradient. By linearly extrapolating the loss landscape, LaM adaptively mixes current and future gradient information, yielding improved convergence on sharp loss surfaces. While similar in spirit to extrapolation methods like Lookahead and extragradient optimizers, LaM requires no additional forward passes or inner-loop updates, making it essentially free at runtime. We prove O(1/T) convergence for LaM under standard convexity assumptions, matching classical momentum rates, and show empirical improvements on CIFAR-10/100 and ImageNet across ResNet and Vision Transformer architectures. However, gains are inconsistent across tasks: LaM marginally improves final accuracy (+0.3-0.7%) on vision transformers but shows negligible benefits on smaller ResNet models. Additionally, LaM introduces two new tunable hyper-parameters whose optimal values vary across datasets, complicating practical adoption. Our findings suggest that while look-ahead gradient information can modestly improve optimization, the benefits are task-dependent and may not justify the added complexity for practitioners seeking robust, plug-and-play optimizers.",
+    "id": 4,
+    "original_id": 52
+  },
+  {
+    "title": "AdaSmooth: An Adaptive Momentum Schedule for Non-Convex Optimization That Usually Helps",
+    "authors": [
+      "Nguyen, T.",
+      "Kumar, S.",
+      "Martinez, C."
+    ],
+    "abstract": "We propose AdaSmooth, a simple modification to standard momentum-based optimizers that adaptively adjusts the momentum coefficient based on the gradient variance. While momentum is known to accelerate convergence in smooth regions, it can hinder progress in noisy or rapidly changing landscapes. Our method heuristically scales momentum inversely with local gradient variance, motivated by the intuition that low variance suggests a stable region where higher momentum is beneficial. We evaluate AdaSmooth on training ResNet-34/50 on CIFAR-10/100 and small-scale vision transformers on ImageNet-1k. Results show 2-5% relative improvement in final accuracy over AdamW with momentum 0.9 in 3/5 experiments, while remaining competitive in the others. We provide a limited convergence guarantee for quadratic objectives but acknowledge the theory does not extend to the general case. Code is available at anonymized-url. While the gains are modest and inconsistent, AdaSmooth introduces no additional hyper-parameters and adds negligible computational overhead, making it a practical drop-in replacement that might help in some settings.",
+    "id": 5,
+    "original_id": 73
+  },
+  {
+    "title": "Gradient-Enhanced Dropout: A Simple Extension with Modest Gains in Generalization",
+    "authors": [
+      "Kumar, S.",
+      "Ostrovski, G.",
+      "Liang, P."
+    ],
+    "abstract": "Dropout remains one of the most widely used regularization techniques in training neural networks, yet little work has explored whether second-order information can improve its effectiveness. We propose Gradient-Enhanced Dropout (GED), a method that adapts dropout probabilities for each neuron based on the magnitude of the gradient flowing through it. Intuitively, neurons that exhibit large gradient variations during training are assigned higher dropout rates to encourage robustness. Our approach requires minimal hyperparameter tuning and can be implemented in fewer than 20 lines of PyTorch code. We evaluate GED on CIFAR-10/100 and ImageNette, where it achieves 0.4-0.7% accuracy improvements over standard dropout, albeit with a 12% increase in training time. While these gains are consistent, they are relatively modest compared to more sophisticated regularization schemes. Theoretically, we prove a PAC-Bayes generalization bound that improves upon standard dropout by a constant factor, though the improvement is small. Our extensive ablations reveal that GED is most effective for medium-sized networks (1-10M parameters) but offers diminishing returns for larger models. Though not a dramatic breakthrough, GED represents a simple, practical enhancement that may benefit practitioners seeking incremental improvements.",
+    "id": 6,
+    "original_id": 79
+  },
+  {
+    "title": "Gradient Surgery for Partially Overlapping Client Data in Federated Learning",
+    "authors": [
+      "Murthy, V.",
+      "Chen, S.",
+      "Krishnan, R."
+    ],
+    "abstract": "Federated learning enables distributed training without centralizing data, but performance degrades when clients\u2019 local distributions differ. Most prior work assumes either homogeneous data or completely non-overlapping classes, whereas real deployments often lie in between: clients share a subset of classes while possessing private ones. We formalize this intermediate scenario and propose Federated Gradient Surgery (FedGS), an algorithm that identifies and down-weights conflicting gradient directions during local training. FedGS uses a lightweight proxy comparison performed on the server to split each minibatch gradient into shared and client-specific components, reducing the influence of private-class updates on the global model. On standard federated benchmarks (CIFAR-10/100, FEMNIST) we show 1.2\u20132.3% higher accuracy and 25% faster convergence relative to FedAvg and the recent SOTA FedProx, with only 2% parameter overhead. However, gains diminish under large client drift or tiny shared label sets, and theoretical justification is limited to quadratic objectives. Code and tuned hyper-parameters are publicly available.",
+    "id": 7,
+    "original_id": 87
+  },
+  {
+    "title": "Learning with Gradient-Noise Scaling Improves Online Quantile Estimation",
+    "authors": [
+      "Nguyen, L.",
+      "Ghosh, D.",
+      "Ahmed, S."
+    ],
+    "abstract": "Recent work reveals correlations between stochastic gradient variances and local curvature, prompting us to re-examine explicit noise modeling in online learning. We propose Gradient-Noise Scaling (GNS), a simple update rule that rescales each stochastic gradient by the inverse of an exponentially-smoothed estimate of its recent variance. Unlike adaptive optimizers such as Adam, GNS adds no momentum, performs no per-parameter learning-rate tuning, and keeps running variances solely for the rescaling coefficient. In controlled experiments on CIFAR-10, ImageNet, and several reinforcement-learning environments, GNS accelerates early training by roughly 10\u201315% and yields mildly lower final losses, but convergence improvements plateau after the initial epochs. Theoretical analysis shows GNS is equivalent to a time-varying, diagonal metric preconditioner under quadratic interpolation errors, though this view is restricted to local neighborhoods and constant noise statistics. Our primary contribution is empirical verification that lightweight noise tracking can improve online quantile estimation of gradients, providing robustness against heavy-tailed gradient distributions. The method adds only one extra hyper-parameter and halves the computational overhead of existing variance-based optimizers. Code and pre-trained models are provided for reproduction. While the gains are consistent, they are incremental; larger architectures and long-training regimes show diminishing returns, questioning the method's significance beyond warm-up regimes.",
+    "id": 8,
+    "original_id": 134
+  },
+  {
+    "title": "Improved Margin-Based Generalization Bounds via Sample-Dependent Priors",
+    "authors": [
+      "Chen, L.",
+      "Kumar, S.",
+      "Nguyen, T."
+    ],
+    "abstract": "We revisit margin-based generalization bounds for deep neural networks, proposing a refined PAC-Bayesian framework that incorporates sample-dependent priors. While existing bounds often rely on worst-case analyses over parameter space, our approach leverages data-dependent information to construct tighter priors, yielding non-vacuous guarantees on standard benchmarks like CIFAR-10 and ImageNet. Our method combines a modified KL divergence term with an empirically-estimated margin distribution, achieving a 30% improvement over state-of-the-art bounds in terms of the effective complexity measure. However, the improvements diminish for networks with batch normalization or residual connections, suggesting fundamental limitations in our current analysis. Theoretically, we establish a new concentration inequality for sample-dependent priors under mild assumptions, though our results require bounded loss functions and do not extend directly to cross-entropy losses commonly used in practice. Experimental validation on small-scale vision tasks demonstrates consistent improvements, but computational overhead scales poorly with network depth, limiting practical applicability to modern architectures. Our work suggests that incorporating data-dependent information into generalization bounds remains promising, though significant theoretical and computational challenges persist for scaling these insights to contemporary deep learning paradigms.",
+    "id": 9,
+    "original_id": 137
+  },
+  {
+    "title": "Gradient Norm Dropout: A Lightweight Regularizer for Deep Networks via Random Gradient Scaling",
+    "authors": [
+      "Liu, T.",
+      "Nguyen, K.",
+      "Roberts, J."
+    ],
+    "abstract": "We introduce Gradient Norm Dropout (GND), a simple regularization technique that randomly scales gradient norms during back-propagation. Inspired by the success of stochastic regularization methods like Dropout and DropConnect, GND perturbs gradient magnitudes with a learned noise distribution to prevent overfitting in deep neural networks. Unlike more complex regularizers that require additional model components or multi-stage training, GND can be implemented with two lines of code and adds no overhead at inference. We theoretically analyze GND in the over-parameterized regime, showing it approximately minimizes a data-adaptive robust loss. Experiments on CIFAR-10/100 and ImageNet show modest improvements (0.3-0.7% top-1 accuracy) over standard baselines, with slightly larger gains on smaller networks. While the gains are not dramatic, GND offers a practical, easy-to-implement option for practitioners seeking lightweight regularization. Our results suggest GND may be most beneficial when computational budget or memory constraints preclude heavier techniques like MixUp or Cutout. Code is available at [anonymous link].",
+    "id": 10,
+    "original_id": 151
+  },
+  {
+    "title": "LoCA: Localized Clustering Adjustment for Partial-Label Learning with Limited Annotations",
+    "authors": [
+      "Nguyen, T.",
+      "Iyer, V.",
+      "Kumar, S."
+    ],
+    "abstract": "Partial-label learning (PLL) addresses classification where each training instance is associated with a candidate set of labels, only one of which is valid. While existing PLL methods assume abundant partial annotations, many real-world scenarios provide only a handful of labeled candidates per class. We introduce Localized Clustering Adjustment (LoCA), a two-stage framework that first identifies class-prototype regions via unsupervised density peaks and subsequently refines per-example candidate sets through local label propagation. By jointly optimizing a cluster compactness objective with a standard PLL loss, LoCA encourages the model to down-weight ambiguous labels within each localized neighborhood. Experiments on CIFAR-100, ImageNet-127, and three text benchmarks show consistent but modest improvements (1.5-2.3% accuracy) over state-of-the-art PLL baselines when only 10% of the training data carry partial annotations. Ablation studies reveal that most gains come from the clustering step, whereas the label-propagation refinement adds marginal benefit. Although LoCA is straightforward to implement, its theoretical justification is limited to a simplified two-class setting, and hyper-parameter sensitivity can affect stability. Code is publicly available.",
+    "id": 11,
+    "original_id": 154
+  },
+  {
+    "title": "LoRa-Flow: Lightweight Low-Rank Normalizing Flows for Fast Density Estimation",
+    "authors": [
+      "Kim, J.",
+      "Rodriguez, S.",
+      "Liu, Y."
+    ],
+    "abstract": "Normalizing flows provide flexible probabilistic models by learning invertible transformations, but their computational cost limits deployment on edge devices. We propose LoRa-Flow, which injects low-rank constraints into the weight matrices of coupling layers to reduce parameters without redesigning the network. On five UCI benchmarks, LoRa-Flow achieves 1.5\u00d7 speed-up and 60 % fewer parameters at the cost of <2 % bits-per-dimension increase versus unconstrained RealNVP. Theoretical analysis shows the low-rank bottleneck still preserves universal approximation in the affine coupling class. However, ablations reveal degradation on high-dimensional images, suggesting the low-rank prior is too restrictive for modalities with complex spatial correlations. Code is available.",
+    "id": 12,
+    "original_id": 173
+  },
+  {
+    "title": "LoRAMA: Low-Rank Adaptation with Memory Attention for Efficient LLM Fine-Tuning",
+    "authors": [
+      "Kumar, S.",
+      "Jones, L.",
+      "Nguyen, P."
+    ],
+    "abstract": "We propose LoRAMA, a that augments Low-Rank Adaptation (LoRA) for parameter-efficient fine-tuning of large language models by incorporating a lightweight memory attention mechanism. While LoRA has shown strong empirical results, its fixed low-rank decomposition may limit adaptation capacity for more complex downstream tasks. LoRAMA introduces a small memory bank of trainable vectors that are dynamically attended to during forward passes, allowing the low-rank matrices to vary in a task-dependent manner. Our method adds only 0.3M parameters beyond standard LoRA while enabling more expressive adaptation. We evaluate LoRAMA on instruction tuning and domain adaptation benchmarks using Llama-2 7B and 13B models. Results show modest improvements of 1-2% accuracy over LoRA baselines across most tasks, with some degradation on simpler datasets. Abprisingly, LoRAMA reduces training time by 12% compared to standard LoRA due to our memory attention implementation. Theoretical analysis suggests our method interpolates between LoRA and full fine-tuning, though convergence guarantees remain limited. ablation studies reveal performance is sensitive to memory bank size and initialization strategy. LoRAMA provides a simple yet effective extension to LoRA that may be particularly useful for practitioners seeking slightly improved adaptation capacity without substantial computational overhead.",
+    "id": 13,
+    "original_id": 193
+  },
+  {
+    "title": "Gradient Confusion-Aware Learning Rates for Stochastic Optimization",
+    "authors": [
+      "Chen, L.",
+      "Martinez, J.",
+      "Singh, P."
+    ],
+    "abstract": "Mini-batch stochastic gradient descent remains the workhorse for large-scale machine learning, yet practical tuning of learning rates still relies on costly grid searches or hand-crafted schedules. We propose Gradient Confusion-Aware Learning Rate (GCALR), a heuristic that monitors the pairwise cosine similarity among per-sample gradients within a mini-batch to adjust the step size on the fly. Intuitively, high disagreement (confusion) suggests the current batch contains noisy or conflicting signals; GCALR reduces the learning rate to stabilize updates. Convergence is proved for smooth, strongly convex objectives under standard assumptions, although the derived bound is no better than classical SGD with the best constant step. Extensive experiments on CIFAR-10/100, ImageNet and Penn Treebank show that GCALR matches hand-tuned SGD performance in 60% of tasks while eliminating tuning budgets. However, gains vanish when large-batch training exceeds 1,024 samples, and competing adaptive optimizers (Adam, Adagrad) remain superior on language modeling benchmarks. Code is publicly available with full hyper-parameter tables. GCALR offers a tuning-free alternative to constant-step SGD with minimal computational overhead, but theoretical insight into its empirical benefits is still incomplete.",
+    "id": 14,
+    "original_id": 194
+  },
+  {
+    "title": "Improving Transformer Generalization with Adaptive Positional Interpolation",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, M.",
+      "Okafor, K."
+    ],
+    "abstract": "While Transformers have achieved remarkable success across domains, their ability to generalize to sequences longer than those seen during training remains limited. We propose Adaptive Positional Interpolation (API), a simple yet effective method that dynamically adjusts positional encodings based on the input sequence length. Our approach interpolates between learned positional embeddings using a learned temperature parameter that controls the smoothness of the interpolation. Unlike recent work that requires architectural modifications, API can be applied as a plug-and-play module to pre-trained models. We evaluate API on language modeling, machine translation, and document classification tasks. Results show modest improvements of 2-3% in perplexity for sequences 2x longer than training data, with some tasks showing no improvement. Ablations reveal performance is sensitive to the initialization of the temperature parameter. While our method provides a lightweight solution to length extrapolation, we acknowledge it falls short of more complex approaches. Theoretically, we provide limited analysis of when interpolation might succeed or fail. Our code is available.",
+    "id": 15,
+    "original_id": 198
+  },
+  {
+    "title": "Adaptive Gradient Noise Injection for Improved Generalization in Neural Networks",
+    "authors": [
+      "Kumar, V.",
+      "Chen, S.",
+      "Johnson, M."
+    ],
+    "abstract": "We propose AdaGN, an optimization technique that adaptively injects gradient noise during neural network training to improve generalization. While previous work has shown that carefully tuned noise schedules can help escape sharp minima, determining optimal noise levels remains challenging. AdaGN addresses this by dynamically adjusting noise magnitude based on gradient history and local curvature estimates. Our method adds zero-mean Gaussian noise to gradients each iteration, with variance computed using a running average of gradient norms and a novel curvature-sensitive scaling factor. On CIFAR-10/100 and ImageNet experiments with ResNet-18 and VGG-16, AdaGN shows modest improvements over SGD+momentum (0.3-0.7% accuracy gains) and competitive performance compared to strong baselines like SAM and AdamW. Theoretical analysis suggests AdaGN encourages flatter minima under simplified quadratic assumptions. While intuitive and easy to implement, our approach requires careful tuning of two additional hyperparameters and may not scale well to very large models due to computational overhead. Code available at anonymous-url.github.io/adagn.",
+    "id": 16,
+    "original_id": 227
+  },
+  {
+    "title": "On the Importance of Normalization in Transductive Few-Shot Learning",
+    "authors": [
+      "Liu, J.",
+      "Chen, S.",
+      "Rodriguez, M."
+    ],
+    "abstract": "Transductive few-shot learning (TFSL) leverages test-time query statistics to adapt class prototypes, yet performance varies dramatically across benchmark splits. We hypothesize that batch normalization layers, fixed after meta-training, distort feature scales under domain shift. We propose Adaptive Transductive Normalization (ATN), a lightweight wrapper that re-estimates batch statistics using support and query features, coupled with a temperature-scaled cross-entropy loss. Extensive experiments on mini-ImageNet, tiered-ImageNet and CUB-200 show gains of 1.3\u20132.7% over state-of-the-art TFSL methods, while adding only 0.4 ms per task. Ablation reveals that half of the improvement comes from temperature scaling alone, and benefits shrink when pre-training on larger corpora. Analysis indicates that ATN chiefly corrects over-confident logits in low-shot regimes, leaving inter-class margins largely unchanged. Although our contribution is modular and easy to plug into existing pipelines, its theoretical justification is limited: we provide only intuitive arguments and empirical correlation rather than generalization bounds. Code and trained checkpoints are publicly available.",
+    "id": 17,
+    "original_id": 230
+  },
+  {
+    "title": "Revisiting Momentum with Signed Gradient Noise: Improved Convergence via Gradient Sign Asymmetry",
+    "authors": [
+      "Kumar, S.",
+      "Chen, L.",
+      "Nguyen, A."
+    ],
+    "abstract": "We propose Signed Momentum (SignMo), a simple modification to standard momentum-based optimizers that incorporates sign information of the gradient noise. By tracking the asymmetry between positive and negative gradient signs across iterations, SignMo adaptively re-scales the momentum coefficient without additional hyper-parameters. Our method is motivated by recent empirical observations of sign imbalances in gradients when training over-parameterized models. We prove convergence rates for SignMo in convex and non-convex settings that match or improve upon standard momentum under a bounded sign-asymmetry assumption. Experiments on ResNet-18/50 across CIFAR-10/100 and ImageNet show modest improvements in final accuracy (+0.3-0.7%) and 5-10% faster convergence compared to SGD with momentum. However, gains diminish on larger models and are less consistent than adaptive methods like Adam. Ablation studies indicate performance is sensitive to batch size and learning rate schedules. While SignMo introduces minimal overhead and achieves measurable speedups on some benchmarks, its theoretical assumptions may not hold broadly, and improvements are task-specific. Code is available at anonymized-repo.github.io/SignMo.",
+    "id": 18,
+    "original_id": 251
+  },
+  {
+    "title": "Adaptive Gradient Clipping with Curvature-Aware Warm-up for Transformer Training",
+    "authors": [
+      "Chen, L.",
+      "Vasileva, N.",
+      "Kumar, V."
+    ],
+    "abstract": "Transformer models often suffer from unstable training dynamics, particularly in the early phases. We propose Adaptive Gradient Clipping with Curvature-Aware Warm-up (AGC-CAW), a simple modification to standard training procedures that adjusts gradient clipping thresholds based on local curvature estimates and training iteration. Our method computes diagonal Hessian approximations using a lightweight Hutchinson estimator and combines these estimates with a monotonically decreasing clipping schedule. AGC-CAW requires no additional hyperparameters beyond those already present in standard optimizers. We validate our approach on language modeling (Wikitext-103) and machine translation (WMT16 EN-DE), showing 2-3% improvements in perplexity and 0.1-0.2 BLEU score gains over baseline configurations. While the improvements are consistent, they remain modest and appear to diminish with larger models (>1B parameters). Theoretical analysis demonstrates convergence guarantees under standard assumptions, though these results rely on Lipschitz continuity conditions that may not hold for deep transformer architectures. Our implementation adds ~15% training overhead compared to standard AdamW. We provide open-source code and configuration files to ensure reproducibility.",
+    "id": 19,
+    "original_id": 306
+  },
+  {
+    "title": "Gradient Surgery in Overparameterized Networks: A Partial Fix with Theoretical Caveats",
+    "authors": [
+      "Kim, S.",
+      "Liu, J.",
+      "Garcia, M."
+    ],
+    "abstract": "We propose Layer-Adaptive Gradient Surgery (LAGS), a simple modification to existing gradient-based optimizers that addresses gradient interference in overparameterized networks. Building on recent observations that gradients across different layers exhibit conflicting directions, we introduce layer-wise projection operators that remove components harmful to overall optimization progress. Our method requires minimal hyperparameter tuning and adds negligible computational overhead. While we provide theoretical analysis showing LAGS converges in idealized settings under restrictive assumptions, we acknowledge these conditions rarely hold in practice. Experimental evaluation on CIFAR-10, CIFAR-100, and ImageNet shows 1.2-2.3% accuracy improvements over AdamW on ResNet architectures, but similar gains vanish on vision transformers and NLP tasks. Despite moderate empirical success, we identify scenarios where LAGS actively hurts performance - particularly when layer gradients contain beneficial complementary information. Our results suggest caution when applying gradient surgery techniques and highlight the gap between theoretical convergence guarantees and practical effectiveness.",
+    "id": 20,
+    "original_id": 318
+  },
+  {
+    "title": "Efficient Gradient Compression via Learned Quantization Schedules",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, M.",
+      "Kim, J."
+    ],
+    "abstract": "Gradient compression is essential for distributed training at scale, but existing methods rely on hand-crafted schedules that may not adapt to varying training dynamics. We propose Adaptive Quantized SGD (AQ-SGD), which learns compression parameters jointly with model parameters using a meta-learning approach. By framing quantization levels as continuous variables that are periodically projected onto discrete values, our method discovers instance-specific compression schedules without communicating additional metadata. Experiments on CIFAR-10 and ImageNet with ResNet-50 show AQ-SGD achieves 40\u00d7 gradient compression while maintaining within 1.2% of baseline accuracy, matching state-of-the-art static methods on most tasks. However, we observe instabilities on Transformer architectures and convergence issues when batch sizes are small, suggesting our current formulation may not capture all necessary dynamics. Theoretical analysis proves convergence to stationary points under bounded gradient assumptions, but requires stronger conditions than uncompressed SGD. Our method shows promise for adaptive distributed training, though practical deployment may require additional stabilization techniques for certain architectures.",
+    "id": 21,
+    "original_id": 322
+  },
+  {
+    "title": "Gradient Noise Rehearsal: Mitigating Catastrophic Forgetting through Learned Perturbation Patterns",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, M.",
+      "Kim, S."
+    ],
+    "abstract": "Continual learning remains challenging due to catastrophic forgetting, where models lose performance on previous tasks when learning new ones. We propose Gradient Noise Rehearsal (GNR), a method that stores minimal task-specific information by learning to generate synthetic noise patterns that approximate the gradient directions of previous tasks. Unlike replay-based methods that require storing raw data, GNR maintains only a small set of learned noise parameters per task. Our experiments on split CIFAR-100 and sequential image classification tasks show that GNR achieves competitive performance (within 3-5% of state-of-the-art replay methods) while using 20x less memory. However, we observe that performance degrades significantly on tasks with substantial domain shift, and our method requires careful tuning of the noise generation hyperparameters. Code is available at [anonymous URL].",
+    "id": 22,
+    "original_id": 360
+  },
+  {
+    "title": "Adaptive Gradient Compression for Federated Learning with Non-IID Data via Learned Quantization Schedules",
+    "authors": [
+      "Chen, L.",
+      "Johnson, M.",
+      "Rodriguez, A."
+    ],
+    "abstract": "Federated learning faces significant challenges when client data follows non-IID distributions, particularly when combined with gradient compression techniques required for communication efficiency. In this work, we propose an adaptive gradient compression framework that dynamically adjusts quantization schedules based on local data characteristics. Our method employs a lightweight meta-network that predicts optimal compression rates for each client using only gradient statistics and local batch information, avoiding additional communication overhead. We introduce a novel regularization term that balances compression efficiency with convergence stability by penalizing quantization patterns that exacerbate client drift. Experiments on image classification and language modeling tasks show 1.2-2.1\u00d7 communication reduction compared to fixed-compression baselines while maintaining comparable accuracy on moderately non-IID partitions. However, performance degrades significantly on pathological non-IID splits where client datasets contain entirely disjoint classes. While our adaptive approach shows promise for practical federated scenarios, theoretical guarantees remain limited to bounded gradient assumptions that may not hold in practice. Code and preprocessed datasets are available at [anonymous link].",
+    "id": 23,
+    "original_id": 362
+  },
+  {
+    "title": "Gradient Surgery with Adaptive Memory: Improving Multi-Task Learning Through Loss Interpolation",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, M.K.",
+      "Jones, S."
+    ],
+    "abstract": "Multi-task learning often suffers from conflicting gradients that impede optimization, yet existing gradient surgery methods lack mechanisms to adaptively balance task objectives during training. We propose Gradient Surgery with Adaptive Memory (GSAM), a simple extension to gradient surgery methods that incorporates a small episodic memory buffer to locally interpolate between task losses. Our approach maintains per-task gradients computed on buffered samples, combining them through a learned convex combination that varies across training stages. On 8 multi-task vision benchmarks and 15 NLP tasks from the GLUE suite, GSAM achieves 1.2% average improvement over PCGrad and GradNorm while adding under 0.3% computational overhead. However, we find benefits diminish with larger models (\u22651B parameters) and our approach is sensitive to both buffer size and learning rate schedules. The method fundamentally trades memory for marginal gains, raising questions about its practical deployment. While GSAM provides a principled approach to adaptive gradient combination, its improvements are incremental and may not justify implementation complexity in resource-constrained settings.",
+    "id": 24,
+    "original_id": 364
+  },
+  {
+    "title": "Improving Transformer Efficiency through Iterative Token Pruning with Learnable Thresholds",
+    "authors": [
+      "Liu, K.",
+      "Chen, J.",
+      "Brown, M."
+    ],
+    "abstract": "While transformer models achieve state-of-the-art results across many domains, their quadratic complexity with respect to sequence length remains computationally prohibitive for long sequences. We propose Dynamic Token Pruning (DTP), a training-free method that iteratively removes low-salience tokens using learnable threshold parameters. Our approach builds upon existing attention-based pruning techniques but introduces two key innovations: threshold vectors that adaptively balance efficiency and accuracy across layers, and a feedback mechanism that re-incorporates pruned tokens when prediction confidence drops. We evaluate DTP on language modeling (WikiText-103), question answering (SQuAD), and image classification (ImageNet) tasks. Results show modest improvements over static baseline pruning methods, achieving 1.8\u00d7 average speedup with <2% accuracy degradation. However, we observe significant variance across tasks: while language modeling shows consistent gains, vision transformers exhibit more erratic behavior, particularly in later layers. Analysis reveals our method struggles with tasks requiring fine-grained spatial information, and the learned thresholds tend to be overly aggressive, removing potentially useful tokens. While DTP demonstrates the potential of adaptive pruning strategies, our empirical findings suggest that more sophisticated scoring mechanisms may be required to achieve reliable improvements across diverse domains.",
+    "id": 25,
+    "original_id": 368
+  },
+  {
+    "title": "Attention Bottlenecks in Transformer Memorization: A Low-Rank Analysis of Inductive Biases",
+    "authors": [
+      "Kumar, S.",
+      "Liu, J.",
+      "Thompson, E."
+    ],
+    "abstract": "We investigate how transformers memorize training sequences through analysis of attention patterns in overparameterized language models. Our theoretical analysis shows that memorization occurs through rank collapse in attention matrices, with rank dropping from O(d) to O(k) where k is the number of memorized patterns. We propose a low-rank regularization scheme that encourages rank collapse during training while maintaining downstream performance. Experiments on synthetic memotasks and WikiText-103 show our method reduces memorization by 15-20% without hurting perplexity, suggesting some memorization may be beneficial for generalization. However, our regularization does not improve performance on established benchmarks like GLUE. While our theoretical analysis provides insight into transformer memorization dynamics, our empirical evaluation is limited to language modeling and may not extend to other modalities. Code and experiments are available at our anonymized repository.",
+    "id": 26,
+    "original_id": 373
+  },
+  {
+    "title": "Gradient Descent with Iteratively Rescaled Gradients: A Simple Speedup Trick for Neural Networks",
+    "authors": [
+      "Liu, K.",
+      "Kumar, S.",
+      "Chen, J."
+    ],
+    "abstract": "We propose Iterative Gradient Rescaling (IGR), a novel optimization technique that adaptively reweights gradient components during training based on their historical magnitudes. Unlike adaptive methods like Adam, IGR does not maintain per-parameter learning rates but instead periodically rescales gradients for each layer using a running estimate of gradient norms from previous iterations. Our method requires no additional hyperparameters beyond standard SGD and adds minimal computational overhead (less than 1% increase in wall-clock time). We evaluate IGR on ResNet-50 and Vision Transformer training on ImageNet, as well as BERT fine-tuning on GLUE tasks. Results show 3-8% relative improvement in final validation accuracy compared to SGD with momentum in most settings, particularly when training budgets are limited to 100-200 epochs. However, IGR shows diminishing benefits with longer training and underperforms AdamW on certain transformer architectures. While our approach is simple to implement and provides consistent gains in resource-constrained settings, we acknowledge that the theoretical justification remains incomplete and the improvement margins are modest. Code is available at [url].",
+    "id": 27,
+    "original_id": 377
+  },
+  {
+    "title": "Gradient Surgery with Adaptive Memory: Improving Stability in Multi-Task Reinforcement Learning",
+    "authors": [
+      "Kumar, S.",
+      "Zhou, L.",
+      "Thompson, J."
+    ],
+    "abstract": "Multi-task reinforcement learning (MTRL) suffers from gradient conflicts between tasks that cause unstable training and negative transfer. While recent gradient surgery methods like PCGrad and GradDrop alleviate this by projecting conflicting gradients, they rely on instantaneous gradient information and ignore historical task relationships. We propose GAMER (Gradient surgery with Adaptive MEmoRy), which maintains an exponentially-decayed memory of task-specific gradients to compute more informed projection directions. Our method introduces a novel memory update rule that balances recent gradient information with historical context, along with an adaptive temperature parameter that controls the trade-off between task alignment and interference. Experiments on Meta-World and multi-task Atari environments show modest improvements: GAMER achieves 3-7% higher success rates compared to PCGrad across 10/15 tasks while reducing training variance by 12%. However, performance gains diminish with larger networks (>10M parameters), suggesting limitations in complex domains. Ablation studies reveal that memory size and decay rate significantly impact performance, with optimal hyperparameters varying substantially across environments. While GAMER provides a practical improvement over existing gradient surgery methods, its computational overhead (15% slower training) and sensitivity to hyperparameter choices limit its broad applicability. Code and hyperparameter settings are available at [anonymized link].",
+    "id": 28,
+    "original_id": 378
+  },
+  {
+    "title": "Attentive Gradient Descent: Learning to Adapt Step Sizes with Self-Attention",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, J.",
+      "Kim, S."
+    ],
+    "abstract": "We propose Attentive Gradient Descent (AGD), a method that uses self-attention mechanisms to dynamically adjust step sizes during optimization. Motivated by the observation that gradient magnitudes vary significantly across dimensions and iterations in neural network training, AGD replaces fixed or heuristic learning rate schedules with a learned attention mechanism that scales gradients based on historical optima information. Our approach computes attention scores over past gradients and parameter states to produce dimension-wise step sizes. We evaluate AGD on standard image classification benchmarks (CIFAR-10/100) and language modeling tasks (WikiText-2), achieving 2-5% better accuracy compared to tuned baselines like AdamW and SGD with momentum, while reducing hyperparameter sensitivity. However, we observe that gains diminish with larger models, and the computational overhead becomes non-negligible. The method introduces 3 additional hyperparameters that require tuning, and while it performs well on standard benchmarks, we find limited improvement on more challenging datasets like ImageNet.",
+    "id": 29,
+    "original_id": 381
+  },
+  {
+    "title": "Alleviating Forgetting in Continual Learning via Parameter-level Dropout Schedules",
+    "authors": [
+      "Liu, J.",
+      "Chen, S.",
+      "Rodriguez, A."
+    ],
+    "abstract": "Catastrophic forgetting remains a fundamental challenge in continual learning settings where models must sequentially learn multiple tasks. While dropout is widely used as a regularization technique, its potential to mitigate forgetting has been underexplored. We propose DropCL, a simple yet effective variant that adaptively schedules dropout rates for different parameters based on their sensitivity to previous tasks. Our method estimates parameter importance using a lightweight Fisher information approximation, then applies higher dropout rates to parameters deemed less critical. We evaluate DropCL on standard continual learning benchmarks including Split CIFAR-100 and Permuted MNIST, achieving modest improvements over baseline methods (average 2.3% accuracy gain). While DropCL shows promise, our analysis reveals that gains diminish significantly when tasks are highly dissimilar. Additionally, the method introduces computational overhead during training (approximately 15%) and requires task boundaries to be known in advance. Our contributions include a formal analysis of why dropout can reduce forgetting under certain conditions, and extensive ablations showing that coarse-grained dropout schedules perform nearly as well as our more sophisticated approach. Code and pre-trained models will be released upon acceptance.",
+    "id": 30,
+    "original_id": 385
+  },
+  {
+    "title": "LoRA-Hash: Parameter-Efficient Fine-Tuning with Learnable Hash Tables",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, S.",
+      "Kim, J."
+    ],
+    "abstract": "Low-Rank Adaptation (LoRA) has become a popular method for parameter-efficient fine-tuning of large language models, but its effectiveness diminishes when targeting multiple tasks simultaneously due to interference between low-rank matrices. We propose LoRA-Hash, a simple extension that replaces static low-rank matrices with learned hash tables that map input tokens to rank-1 updates. This allows different regions of the input space to use distinct adaptation parameters while sharing a common hash function. On the GLUE benchmark, LoRA-Hash achieves 0.8% higher average accuracy than standard LoRA when training on multiple tasks with a 2\u00d7 memory reduction. However, we observe significant variance across tasks (\u00b14.2%), suggesting that hash-based adaptation may not be universally beneficial. Analysis reveals that performance gains are concentrated in tasks with clear input-output patterns, while tasks requiring fine-grained reasoning show degradation. Our method requires minimal code changes to existing LoRA implementations and introduces only 0.1M additional parameters. While LoRA-Hash shows promise for multi-task scenarios, we acknowledge limitations in theoretical understanding and the need for better initialization strategies.",
+    "id": 31,
+    "original_id": 391
+  },
+  {
+    "title": "Momentum-Scheduled Adam: Improving Convergence via Adaptive Gradient Memory",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, J.",
+      "Kim, S.",
+      "Thompson, B."
+    ],
+    "abstract": "We propose Momentum-Scheduled Adam (MS-Adam), a simple modification to Adam that schedules its momentum parameters using curriculum learning principles. While Adam remains the de facto optimizer for training neural networks, its performance often degrades for tasks with sparse gradients or non-stationary objectives. Our approach introduces scheduled decay rates that adaptively adjust momentum based on gradient history, theoretically guaranteeing convergence for a broader class of non-convex objectives than standard Adam. We derive convergence bounds showing MS-Adam achieves O(1/T) rates under milder assumptions than previously established. Experimental evaluation on CIFAR-10/100 image classification shows 0.8-1.1% accuracy improvements over Adam baselines, and 5-7% faster convergence on language modeling tasks. However, these gains diminish on larger-scale benchmarks like ImageNet, where MS-Adam performs comparably to AdamW with careful hyperparameter tuning. Our analysis reveals the schedule's effectiveness correlates strongly with gradient sparsity patterns, suggesting limited utility for dense-gradient regimes. While the method offers modest improvements in specific settings, the computational overhead and additional hyperparameters may outweigh benefits for many applications. Code is available at anonymous.url/ms-adam.",
+    "id": 32,
+    "original_id": 396
+  },
+  {
+    "title": "Gradient Descent with Periodic Sparsification: A Memory-Efficient Approach for Low-Rank Adaptation",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, M.",
+      "Kumar, S."
+    ],
+    "abstract": "We propose PSGD (Periodic Sparsification Gradient Descent), a simple modification to standard gradient-based optimization that periodically enforces sparsity on model updates during fine-tuning. Our method applies magnitude-based pruning to gradients every k steps, maintaining only the top-p fraction of gradient components before applying the update. This approach is motivated by the observation that during fine-tuning of pre-trained models, most gradient energy concentrates in a small subset of parameters. We evaluate PSGD on parameter-efficient fine-tuning tasks across vision and language domains, including LoRA adaptation of large language models. Experiments on GLUE benchmarks and CIFAR-10/100 show 1.3-2.1\u00d7 memory reduction during training with <2% performance degradation compared to standard fine-tuning. While the memory savings are consistent, we observe that performance gaps widen on more complex tasks like MMLU (4.7% drop), suggesting limitations of our simple magnitude-based pruning strategy. Theoretical analysis reveals PSGD converges at rate O(1/\u221aT) under standard convexity assumptions, matching standard SGD up to a constant factor. Code is available at [anonymous link].",
+    "id": 33,
+    "original_id": 400
+  },
+  {
+    "title": "Gradient Surgery Meets Lottery Tickets: Interpolating Pruning Techniques for Overparameterized Networks",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, J.",
+      "Kumar, S."
+    ],
+    "abstract": "We investigate whether combining magnitude-based pruning with gradient-based optimization can yield neural networks that are simultaneously sparse and robust to catastrophic forgetting in continual learning settings. Our approach, Sparse Gradient Surgery (SGS), applies iterative magnitude pruning to identify a sparse subnetwork, then fine-tunes this subnetwork using gradient projection techniques to maintain performance on previously seen tasks. While we demonstrate that SGS achieves competitive compression ratios (up to 95% sparsity) on CIFAR-10 with minimal accuracy loss compared to dense baselines, our results on continual learning benchmarks yield mixed outcomes. Specifically, SGS provides modest improvements in backward transfer (1-3% over standard fine-tuning) but fails to match the performance of more sophisticated regularization methods in forward transfer scenarios. Our theoretical analysis suggests that the effectiveness of SGS is highly dependent on the alignment between the sparse subnetwork's gradient subspace and the optimization trajectories of sequential tasks. Though our findings validate the intuition that sparse networks can serve as better feature extractors for continual learning, the practical gains remain limited to specific experimental configurations. We make our code and checkpoints publicly available to facilitate further investigation into the interplay between sparsity and plasticity in neural networks.",
+    "id": 34,
+    "original_id": 404
+  },
+  {
+    "title": "Rethinking Dropout in Transformers: A Frequency-Domain Perspective",
+    "authors": [
+      "Liu, K.",
+      "Brown, S.",
+      "Kumar, V."
+    ],
+    "abstract": "While dropout is widely used to regularize transformer networks, its interaction with multi-head attention mechanisms remains poorly understood. We propose FreqDrop, a dropout variant that operates in the frequency domain of attention maps rather than the standard element-wise masking. Our key insight is that traditional dropout disrupts low-frequency attention patterns that are crucial for long-range dependencies, while preserving noisy high-frequency components. FreqDrop addresses this by learning to selectively mask frequency bands based on their spectral energy, effectively providing adaptive regularization that varies across layers. Experiments on standard NLP benchmarks (GLUE, SQuAD) show modest improvements of 0.3-0.7% over standard dropout when using large pretrained models, with particularly strong gains on longer sequences (>512 tokens). However, improvements shrink considerably when training from scratch, and computational overhead increases by 15-20% due to FFT operations. While our approach offers a principled view of attention regularization, the practical benefits appear limited to specific regimes. Code and pretrained models are available at anonymized-url.",
+    "id": 35,
+    "original_id": 412
+  },
+  {
+    "title": "Gradient Descent with Lookahead Buffering: A Simple Extension for Improved Convergence in Non-Convex Optimization",
+    "authors": [
+      "Liu, J.",
+      "Thompson, K.",
+      "Chen, S.",
+      "Anderson, M."
+    ],
+    "abstract": "We propose Lookahead Buffering (LB), a lightweight modification to standard gradient descent that maintains a small history of previous gradients to guide future updates. By linearly combining current and past gradients within a moving window, LB introduces momentum-like behavior without the hyperparameter sensitivity of traditional momentum methods. Our approach requires only storing k=3-5 additional gradient vectors (O(kd) memory) and can be implemented with three extra lines of PyTorch code. We prove convergence guarantees for LB on strongly convex objectives, achieving O(1/T) rates that match gradient descent. Empirically, LB shows consistent but modest improvements across various tasks: 2-4% faster convergence on ImageNet training, 1.5% absolute accuracy gains on CIFAR-10/100, and 8-12% sample efficiency improvements in tabular RL environments. While these results demonstrate promise, we acknowledge the improvements are incremental rather than transformative. Our ablation studies reveal LB is most beneficial when combined with adaptive optimizers like Adam, suggesting its primary contribution may be as a plug-and-play enhancement rather than a standalone algorithm.",
+    "id": 36,
+    "original_id": 414
+  },
+  {
+    "title": "Efficient Gradient Descent with Dynamic Learning Rate Recycling",
+    "authors": [
+      "Chen, L.",
+      "Kumar, S.",
+      "Anderson, J."
+    ],
+    "abstract": "Modern optimization methods often discard past gradient information, potentially wasting computational resources. We propose Gradient Recycling (GR), a simple modification to standard SGD that stores and reuses previous gradients through a dynamic weighting scheme based on cosine similarity with the current gradient direction. Our method requires minimal memory overhead (storing only k=5-10 past gradients) and one extra hyperparameter. We provide theoretical analysis showing GR achieves similar convergence rates to SGD for convex objectives, though our bounds contain additional terms that scale with the recycling parameter. Empirically, GR demonstrates 5-15% faster convergence on ResNet training for CIFAR-10 and ImageNet compared to vanilla SGD with momentum, but improvements are inconsistent across architectures and datasets. Ablation studies reveal performance degrades when k>20, suggesting limited benefit from longer gradient memory. While GR offers modest practical gains on some tasks, we acknowledge its benefits may not justify the implementation complexity for most practitioners. Code is available at [anonymized for review].",
+    "id": 37,
+    "original_id": 416
+  },
+  {
+    "title": "Improving Transformer Efficiency via Learnable Token Merging with Curriculum Scheduling",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, A.",
+      "Kim, S.",
+      "Johnson, M."
+    ],
+    "abstract": "Transformer models have achieved remarkable success across domains, but their quadratic complexity with respect to sequence length remains a critical bottleneck. While previous work has explored token pruning and merging heuristics to reduce computational cost, these methods often rely on fixed rules or require expensive pre-training adaptations. We propose a learnable token merging framework that dynamically reduces sequence length during fine-tuning using a lightweight gating network. Our method introduces curriculum scheduling that gradually increases compression ratios throughout training, stabilizing optimization while achieving significant speedups. Specifically, we train a small MLP to predict merge decisions for consecutive token pairs, guided by auxiliary losses that preserve information content. Across three NLP benchmarks (GLUE, SQuAD, and CNN/DM), our approach reduces inference FLOPs by 25-40% with minimal degradation (<1% relative) on most tasks. However, we observe more substantial performance drops (3-5%) on tasks requiring fine-grained reasoning (e.g., QQP, MNLI). Analysis reveals our merging policy tends to aggressively compress syntactic markers necessary for complex reasoning. While our method offers a practical trade-off between efficiency and performance, the learned merging strategies show limited generalization across domains, suggesting the need for task-specific tuning. Code and pre-trained models are available at [URL].",
+    "id": 38,
+    "original_id": 417
+  },
+  {
+    "title": "Revisiting Curriculum Learning with Adaptive Difficulty Balancing",
+    "authors": [
+      "Liu, K.",
+      "Chen, S.",
+      "Rodriguez, M."
+    ],
+    "abstract": "Curriculum learning has shown promise in improving model generalization by gradually increasing task difficulty. However, existing approaches rely on hand-crafted schedules or fixed heuristics that may not adapt to dataset-specific characteristics. We propose an adaptive curriculum learning framework that dynamically balances the rate at which training examples are introduced based on their local consistency with respect to the current model. Our method uses a momentum-based estimator to track example-wise learning signals, adjusting their presentation probabilities without requiring prior domain knowledge. We evaluate our approach on vision and language benchmarks with standard architectures. Results show modest improvements (0.3-1.2% accuracy gains) over baseline training on 4 of 7 datasets, with particularly strong performance on noisy label scenarios. While these gains are encouraging, we observe that the benefits diminish with larger models and longer training horizons. Our findings suggest that adaptive curricula may be most effective when computational budgets are constrained. Code and pretrained models are available at anonymous URL.",
+    "id": 39,
+    "original_id": 428
+  },
+  {
+    "title": "Gradient Surgery for Improving Transfer Learning in Small-Scale Vision Models",
+    "authors": [
+      "Liu, J.",
+      "Kim, S.",
+      "Brown, M."
+    ],
+    "abstract": "We investigate whether gradient manipulation techniques developed for multitask learning can improve transfer learning performance on small-scale vision tasks. While existing transfer learning methods typically fine-tune pre-trained models using standard gradient descent, we hypothesize that explicitly constraining the fine-tuning gradients to maintain similarity with pre-trained features could improve generalization, particularly in low-data regimes. We propose Gradient Projection Transfer (GPT), a simple method that projects task gradients onto the subspace spanned by pre-trained representations during fine-tuning. Our experiments on CIFAR-10/100 and a subset of ImageNet (100 classes) show that GPT achieves 1-3% accuracy improvements over standard fine-tuning baselines when using 1-10% of the training data, with diminishing returns on larger datasets. However, we find that similar improvements can be achieved by simply reducing the learning rate. Theoretical analysis suggests our method provides implicit regularization equivalent to \u21132 weight decay under certain assumptions. While our results indicate limited practical advantage over careful hyperparameter tuning, the method's simplicity and theoretical connections may be of interest to the transfer learning community.",
+    "id": 40,
+    "original_id": 435
+  },
+  {
+    "title": "Adaptive Gradient Descent with Polynomial Stepsize Scheduling",
+    "authors": [
+      "Chen, L.",
+      "Kapoor, A.",
+      "Nakamura, S."
+    ],
+    "abstract": "We propose Poly-GD, a gradient descent variant that uses polynomial decay schedules for stepsize adaptation in non-convex optimization. Unlike cosine or exponential schedules commonly used in deep learning, our method employs learnable polynomial coefficients updated via meta-gradient descent. We provide theoretical convergence guarantees for quadratic objectives and demonstrate empirical improvements on CIFAR-10 and ImageNet. On ResNet-18, Poly-GD achieves 0.8% better final validation accuracy compared to standard SGD with cosine annealing, with comparable training time. However, our method shows diminishing returns on larger architectures like EfficientNet-B4. While the polynomial scheduling introduces minimal overhead (5% increase in wall-clock time), our theoretical analysis only covers convex cases, and the meta-learning component adds complexity. Ablation studies suggest the benefit primarily comes from the polynomial form rather than the adaptive coefficients. Our code is available at [redacted].",
+    "id": 41,
+    "original_id": 450
+  },
+  {
+    "title": "Adaptive Curriculum Learning via Difficulty-Aware Sampling Improves Sample Efficiency in Deep Reinforcement Learning",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, M.",
+      "Kim, J."
+    ],
+    "abstract": "Curriculum learning has shown promise for improving sample efficiency in deep RL, but existing approaches often rely on hand-crafted curricula or simple heuristics that may not generalize across environments. We propose AdaCurriculum, a simple yet effective method that adaptively adjusts the sampling distribution over training episodes based on a learned measure of task difficulty. Our approach uses a lightweight auxiliary network to estimate episode difficulty from initial states, requiring only 5% additional parameters. We evaluate AdaCurriculum on three standard continuous control benchmarks (MuJoCo) and two discrete action environments. Results show 15-40% sample efficiency improvements over uniform sampling baselines and 8-25% gains over a recent curriculum learning method, though we find variance across seeds can be high (standard deviation 12.3%). While our method achieves consistent improvements on medium-complexity environments, benefits diminish on simpler tasks, suggesting the approach may be most valuable when the optimal curriculum is non-trivial. Ablations reveal that both the difficulty estimator and adaptive sampling schedule contribute to performance, with neither component alone sufficient. Our implementation and hyperparameters are provided for reproducibility.",
+    "id": 42,
+    "original_id": 466
+  },
+  {
+    "title": "Gradient Amplification Networks: A Lightweight Architecture for Improving Transformer Optimization Dynamics",
+    "authors": [
+      "Chen, L.",
+      "Rodriguez, J.M.",
+      "Kumar, S."
+    ],
+    "abstract": "Transformer architectures suffer from optimization challenges when scaled to modest model sizes, often exhibiting gradient vanishing in early layers. We propose Gradient Amplification Networks (GANs), a lightweight architectural modification that re-weights gradient flows without altering forward pass computations. Our approach inserts parallel amplification pathways that modulate gradient magnitudes during backpropagation based on layer-wise statistics. On GLUE and SuperGLUE benchmarks with 125M-350M parameter models, GANs achieve modest improvements (1.2-2.3% average score increase) over baseline transformers while maintaining identical inference costs. Theoretical analysis reveals our method approximates a second-order optimization step, though we observe diminishing returns beyond 500M parameters. Our results suggest that careful gradient re-weighting can provide incremental training benefits, though the gains are task-specific and may not generalize to larger scales. Code is available at [anonymous URL].",
+    "id": 43,
+    "original_id": 489
+  }
+]
